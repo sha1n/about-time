@@ -1,15 +1,15 @@
-[![CI](https://github.com/sha1n/ontime/actions/workflows/ci.yml/badge.svg)](https://github.com/sha1n/ontime/actions/workflows/ci.yml)
-[![Coverage](https://github.com/sha1n/ontime/actions/workflows/coverage.yml/badge.svg)](https://github.com/sha1n/ontime/actions/workflows/coverage.yml)
-![GitHub](https://img.shields.io/github/license/sha1n/ontime)
-![npm type definitions](https://img.shields.io/npm/types/@sha1n/ontime)
-![npm](https://img.shields.io/npm/v/@sha1n/ontime)
+[![CI](https://github.com/sha1n/about-time/actions/workflows/ci.yml/badge.svg)](https://github.com/sha1n/about-time/actions/workflows/ci.yml)
+[![Coverage](https://github.com/sha1n/about-time/actions/workflows/coverage.yml/badge.svg)](https://github.com/sha1n/about-time/actions/workflows/coverage.yml)
+![GitHub](https://img.shields.io/github/license/sha1n/about-time)
+![npm type definitions](https://img.shields.io/npm/types/@sha1n/about-time)
+![npm](https://img.shields.io/npm/v/@sha1n/about-time)
 
 
-# OnTime
+# About-Time
 
 A set of essential time related utilities.
 
-- [OnTime](#ontime)
+- [About-Time](#about-time)
   - [Install](#install)
   - [Delay](#delay)
   - [Sleep](#sleep)
@@ -26,7 +26,7 @@ A set of essential time related utilities.
 
 ## Install
 ```bash
-npm i @sha1n/ontime
+npm i @sha1n/about-time
 ```
 
 ## Delay

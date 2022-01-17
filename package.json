@@ -1,8 +1,8 @@
 {
-  "name": "@sha1n/ontime",
+  "name": "@sha1n/about-time",
   "version": "0.0.1",
   "description": "A set of essential time related utilities",
-  "repository": "https://github.com/sha1n/ontime",
+  "repository": "https://github.com/sha1n/about-time",
   "author": "Shai Nagar",
   "license": "MIT",
   "types": "./dist/types",
