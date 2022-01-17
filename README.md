@@ -7,7 +7,7 @@
 
 # About-Time
 
-A set of essential time related utilities.
+A collection of essential time related utilities.
 
 - [About-Time](#about-time)
   - [Install](#install)
