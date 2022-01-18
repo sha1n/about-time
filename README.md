@@ -83,7 +83,7 @@ The optional `limit` provides control over maximum pause intervals, so they don'
 
 **The formula used by this implementation is the following:** 
 
-interval<sub>i</sub> = min(limit, (exponential<sup>i</sup>) - 1) / 2
+interval<sub>i</sub> = min(limit, (exponential<sup>i</sup> - 1) / 2)
 
 ```ts
 const retryPolicy = exponentialBackoffRetryPolicy(/* count = */10, /* opts?: { exponential?: number, limit?: number, units?: TimeUnit }*/);
