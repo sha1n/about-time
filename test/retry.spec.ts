@@ -1,44 +1,75 @@
-import { fixedRetryPolicy, retriable, simpleRetryPolicy } from '../lib/retry';
+import { fixedRetryPolicy, retriable, retryAround, simpleRetryPolicy } from '../lib/retry';
 import { anError, aString } from './randoms';
 
-describe('retriable', () => {
+describe('retry', () => {
   const expectedError = anError();
 
-  test('should throw when no retries are left', async () => {
-    const policy = fixedRetryPolicy([1, 1]);
-    const fail = () => Promise.reject(expectedError);
+  describe('when no predicate is specied', () => {
+    describe('retriable', () => {
+      test('should throw when no retries are left', async () => {
+        const policy = fixedRetryPolicy([1, 1]);
+        const fail = () => Promise.reject(expectedError);
 
-    await expect(retriable(fail, policy)()).rejects.toThrow(expectedError);
+        await expect(retriable(fail, policy)()).rejects.toThrow(expectedError);
+      });
+
+      test('should throw when no retries are left with sync action', async () => {
+        const policy = fixedRetryPolicy([1]);
+        const failSync = () => {
+          throw expectedError;
+        };
+
+        await expect(retriable(failSync, policy)()).rejects.toThrow(expectedError);
+      });
+
+      test('should throw when the provided policy is effectively empty', async () => {
+        const policy = fixedRetryPolicy([]);
+        const { action } = givenAsyncActionThatFailsOnce();
+
+        await expect(retriable(action, policy)()).rejects.toThrow(expectedError);
+      });
+
+      test('should retry and resolve with an async function resolved value', async () => {
+        const policy = simpleRetryPolicy(1, 1);
+        const { action, expectedValue } = givenAsyncActionThatFailsOnce();
+
+        await expect(retriable(action, policy)()).resolves.toEqual(expectedValue);
+      });
+
+      test('should retry and resolve with a sync function returned value', async () => {
+        const policy = simpleRetryPolicy(1, 1);
+        const { action, expectedValue } = givenSyncActionThatFailsOnce();
+
+        await expect(retriable(action, policy)()).resolves.toEqual(expectedValue);
+      });
+    });
+
+    describe('retryAround', () => {
+      test('should retry if an error is thrown', async () => {
+        const policy = simpleRetryPolicy(1, 1);
+        const { action, expectedValue } = givenSyncActionThatFailsOnce();
+
+        await expect(retryAround(action, policy)).resolves.toEqual(expectedValue);
+      });
+    });
   });
 
-  test('should throw when no retries are left with sync action', async () => {
-    const policy = fixedRetryPolicy([1]);
-    const failSync = () => {
-      throw expectedError;
-    };
+  describe('when a predicate is specified', () => {
+    describe('retriable', () => {
+      test('should not retry if a specified predicate returns false', async () => {
+        const policy = simpleRetryPolicy(1, 1);
+        const { action } = givenSyncActionThatFailsOnce();
 
-    await expect(retriable(failSync, policy)()).rejects.toThrow(expectedError);
-  });
+        await expect(retriable(action, policy, () => false)()).rejects.toThrow(expectedError);
+      });
 
-  test('should throw when the provided policy is effectively empty', async () => {
-    const policy = fixedRetryPolicy([]);
-    const { action } = givenAsyncActionThatFailsOnce();
+      test('should retry if a specified predicate returns true', async () => {
+        const policy = simpleRetryPolicy(1, 1);
+        const { action } = givenSyncActionThatFailsOnce();
 
-    await expect(retriable(action, policy)()).rejects.toThrow(expectedError);
-  });
-
-  test('should retry and resolve with an async function resolved value', async () => {
-    const policy = simpleRetryPolicy(1, 1);
-    const { action, expectedValue } = givenAsyncActionThatFailsOnce();
-
-    await expect(retriable(action, policy)()).resolves.toEqual(expectedValue);
-  });
-
-  test('should retry and resolve with a sync function returned value', async () => {
-    const policy = simpleRetryPolicy(1, 1);
-    const { action, expectedValue } = givenSyncActionThatFailsOnce();
-
-    await expect(retriable(action, policy)()).resolves.toEqual(expectedValue);
+        await expect(retriable(action, policy, () => true)()).toResolve();
+      });
+    });
   });
 
   function givenSyncActionThatFailsOnce(): {

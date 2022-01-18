@@ -78,20 +78,27 @@ const retryPolicy = fixedRetryPolicy([3, 10, 50, 100], TimeUnit.Milliseconds);
 ```
 
 #### Exponential backoff retry policy
+Exponential backoff formula based retry policy with optional custom exponent base and a limit. 
+The optional `limit` provides control over maximum pause intervals, so they don't soar beyond reasonable values.
+
+**The formula used by this implementation is the following:** 
+
+interval<sub>i</sub> = min(limit, (exponential<sup>i</sup>) - 1) / 2
+
 ```ts
-// 10 retries, starting with 10 milliseconds and then exponentially increases the delay based on the default power value without a limit.
 const retryPolicy = exponentialBackoffRetryPolicy(/* count = */10, /* opts?: { exponential?: number, limit?: number, units?: TimeUnit }*/);
 ```
 
 ### RetryAround
-Executes the given function with the retries based on the specified policy.
+Executes the given function with retries based on the specified policy and *optional* predicate.
+The predicate provides control over which errors we want to retry on.
 ```ts
-const result = await retryAround(action, retryPolicy);
+const result = await retryAround(action, retryPolicy, predicate);
 ```
 
 ### Retriable
-Wraps a given function with `retryAround` with the specified policy.
+Wraps a given function with `retryAround` with the specified arguments.
 ```ts
-const retriableAction = retriable(action, retryPolicy);
+const retriableAction = retriable(action, retryPolicy, predicate);
 const result = await retriableAction();
 ```
