@@ -79,7 +79,11 @@ function exponentialBackoffRetryPolicy(
   return Object.freeze(new ExponentialBackoffRetryPolicy(count, opts?.exponential, opts?.limit, opts?.units));
 }
 
-async function retryAround<T>(action: () => T | Promise<T>, policy: RetryPolicy): Promise<T> {
+async function retryAround<T>(
+  action: () => T | Promise<T>,
+  policy: RetryPolicy,
+  predicate: (e: Error) => boolean = () => true
+): Promise<T> {
   let next: IteratorResult<number, undefined>;
   const intervals = policy.intervals()[Symbol.iterator]();
   do {
@@ -88,7 +92,7 @@ async function retryAround<T>(action: () => T | Promise<T>, policy: RetryPolicy)
     } catch (e) {
       next = intervals.next();
 
-      if (next.done) {
+      if (next.done || !predicate(e)) {
         throw e;
       }
 
@@ -99,9 +103,13 @@ async function retryAround<T>(action: () => T | Promise<T>, policy: RetryPolicy)
   throw new Error('Unexpected error. This is most likely a bug.');
 }
 
-function retriable<T>(action: () => T | Promise<T>, policy: RetryPolicy): () => Promise<T> {
+function retriable<T>(
+  action: () => T | Promise<T>,
+  policy: RetryPolicy,
+  predicate: (e: Error) => boolean = () => true
+): () => Promise<T> {
   return () => {
-    return retryAround(action, policy);
+    return retryAround(action, policy, predicate);
   };
 }
 
