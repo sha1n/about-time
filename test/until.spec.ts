@@ -43,8 +43,8 @@ describe.each(cases())('%s', ({ fn }) => {
       })
     ).toResolve();
 
-    expect(elapsed()).toBeGreaterThan(100);
-    expect(elapsed()).toBeLessThan(100 + 20);
+    expect(elapsed()).toBeGreaterThanOrEqual(100);
+    expect(elapsed()).toBeLessThan(100 * 1.5);
   });
 
   test('should resolve when the provided condition is true with no timeout boundary', async () => {
