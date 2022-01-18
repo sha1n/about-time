@@ -1,11 +1,7 @@
 export default {
   testMatch: ['**/test/**/*.spec.ts'],
   coveragePathIgnorePatterns: ['test/*', 'dist/*'],
-  reporters: [
-    'default',
-    ['jest-summary-reporter', { failuresOnly: true }],
-    ['jest-html-reporters', {}]
-  ],
+  reporters: ['default', ['jest-summary-reporter', { failuresOnly: true }], ['jest-html-reporters', {}]],
   verbose: true,
   maxWorkers: '100%',
   transform: {

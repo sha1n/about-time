@@ -28,7 +28,7 @@ describe('FixedRetryPolicy', () => {
     const units = TimeUnit.Second;
     const policy = fixedRetryPolicy(intervals, { units });
 
-    expect(consume(policy)).toEqual(intervals.map((i) => i * units));
+    expect(consume(policy)).toEqual(intervals.map(i => i * units));
   });
 });
 

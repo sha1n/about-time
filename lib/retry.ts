@@ -8,11 +8,7 @@ interface RetryPolicy {
 class SimpleRetryPolicy implements RetryPolicy {
   private readonly interval: number;
 
-  constructor(
-    private readonly count: number,
-    interval: number,
-    units?: TimeUnit
-  ) {
+  constructor(private readonly count: number, interval: number, units?: TimeUnit) {
     this.interval = toMilliseconds(interval, units);
   }
 
@@ -68,18 +64,11 @@ class FixedRetryPolicy implements RetryPolicy {
   }
 }
 
-function simpleRetryPolicy(
-  count: number,
-  interval: number,
-  opts?: { units?: TimeUnit }
-): RetryPolicy {
+function simpleRetryPolicy(count: number, interval: number, opts?: { units?: TimeUnit }): RetryPolicy {
   return Object.freeze(new SimpleRetryPolicy(count, interval, opts?.units));
 }
 
-function fixedRetryPolicy(
-  intervals: number[],
-  opts?: { units?: TimeUnit }
-): RetryPolicy {
+function fixedRetryPolicy(intervals: number[], opts?: { units?: TimeUnit }): RetryPolicy {
   return Object.freeze(new FixedRetryPolicy(intervals, opts?.units));
 }
 
@@ -87,20 +76,10 @@ function exponentialBackoffRetryPolicy(
   count: number,
   opts?: { exponential?: number; limit?: number; units?: TimeUnit }
 ): RetryPolicy {
-  return Object.freeze(
-    new ExponentialBackoffRetryPolicy(
-      count,
-      opts?.exponential,
-      opts?.limit,
-      opts?.units
-    )
-  );
+  return Object.freeze(new ExponentialBackoffRetryPolicy(count, opts?.exponential, opts?.limit, opts?.units));
 }
 
-async function retryAround<T>(
-  action: () => T | Promise<T>,
-  policy: RetryPolicy
-): Promise<T> {
+async function retryAround<T>(action: () => T | Promise<T>, policy: RetryPolicy): Promise<T> {
   let next: IteratorResult<number, undefined>;
   const intervals = policy.intervals()[Symbol.iterator]();
   do {
@@ -120,20 +99,10 @@ async function retryAround<T>(
   throw new Error('Unexpected error. This is most likely a bug.');
 }
 
-function retriable<T>(
-  action: () => T | Promise<T>,
-  policy: RetryPolicy
-): () => Promise<T> {
+function retriable<T>(action: () => T | Promise<T>, policy: RetryPolicy): () => Promise<T> {
   return () => {
     return retryAround(action, policy);
   };
 }
 
-export {
-  RetryPolicy,
-  retryAround,
-  retriable,
-  fixedRetryPolicy,
-  simpleRetryPolicy,
-  exponentialBackoffRetryPolicy
-};
+export { RetryPolicy, retryAround, retriable, fixedRetryPolicy, simpleRetryPolicy, exponentialBackoffRetryPolicy };

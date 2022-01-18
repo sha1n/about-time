@@ -30,9 +30,7 @@ describe('SimpleRetryPolicy', () => {
     const units = TimeUnit.Hours;
     const policy = simpleRetryPolicy(expectedCount, interval, { units });
 
-    expect(consume(policy)).toEqual(
-      Array(expectedCount).fill(interval * units)
-    );
+    expect(consume(policy)).toEqual(Array(expectedCount).fill(interval * units));
   });
 });
 

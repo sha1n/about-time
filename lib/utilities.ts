@@ -8,7 +8,7 @@ import { TimeUnit, toMilliseconds } from './timeunit';
  * @returns a promise that resolves when the specified time has elapsed.
  */
 function sleep(time: number, units?: TimeUnit): Promise<void> {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     setTimeout(resolve, toMilliseconds(time, units));
   });
 }
@@ -21,11 +21,7 @@ function sleep(time: number, units?: TimeUnit): Promise<void> {
  * @param units the units on time
  * @returns a promise that resolves when the specified time has elapsed.
  */
-function delay<T>(
-  action: () => T | Promise<T>,
-  time: number,
-  units?: TimeUnit
-): Promise<T> {
+function delay<T>(action: () => T | Promise<T>, time: number, units?: TimeUnit): Promise<T> {
   const delayMs = toMilliseconds(time, units);
   return new Promise((resolve, reject) => {
     setTimeout(() => Promise.resolve(action()).then(resolve, reject), delayMs);
@@ -60,12 +56,8 @@ async function until(
   }
 
   const defaultInterval = 50;
-  const deadline = opts
-    ? Date.now() + toMilliseconds(opts.timeout, opts.units)
-    : Number.MAX_VALUE;
-  const interval = opts?.interval
-    ? toMilliseconds(opts.interval, opts.units)
-    : defaultInterval;
+  const deadline = opts ? Date.now() + toMilliseconds(opts.timeout, opts.units) : Number.MAX_VALUE;
+  const interval = opts?.interval ? toMilliseconds(opts.interval, opts.units) : defaultInterval;
 
   return new Promise<void>((resolve, reject) => {
     const handle = setInterval(() => {

@@ -7,9 +7,7 @@ describe.each(cases())('%s', ({ fn }) => {
   test('should reject with timeout when the provided timeout is passed', async () => {
     const never = () => Date.now() < 0;
 
-    await expect(
-      fn(never, { timeout: 1, units: TimeUnit.Milliseconds })
-    ).rejects.toThrow('Timeout');
+    await expect(fn(never, { timeout: 1, units: TimeUnit.Milliseconds })).rejects.toThrow('Timeout');
   });
 
   test('should reject when the provided condition function throws', async () => {
@@ -18,9 +16,7 @@ describe.each(cases())('%s', ({ fn }) => {
       throw expectedError;
     };
 
-    await expect(
-      fn(never, { timeout: 1, units: TimeUnit.Milliseconds })
-    ).rejects.toThrow(expectedError);
+    await expect(fn(never, { timeout: 1, units: TimeUnit.Milliseconds })).rejects.toThrow(expectedError);
   });
 
   test('should resolve when the provided condition is true within a specified timeout boundary', async () => {
@@ -29,9 +25,7 @@ describe.each(cases())('%s', ({ fn }) => {
       value = true;
     }, 100);
 
-    await expect(
-      fn(() => value, { timeout: 1, units: TimeUnit.Minutes })
-    ).toResolve();
+    await expect(fn(() => value, { timeout: 1, units: TimeUnit.Minutes })).toResolve();
   });
 
   test('should use the interval option when present', async () => {

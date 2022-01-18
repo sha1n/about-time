@@ -10,17 +10,13 @@ describe('delay', () => {
   test('should reject when the action rejects', async () => {
     const action = () => Promise.reject(expectedError);
 
-    await expect(delay(action, 1, TimeUnit.Milliseconds)).rejects.toThrow(
-      expectedError
-    );
+    await expect(delay(action, 1, TimeUnit.Milliseconds)).rejects.toThrow(expectedError);
   });
 
   test('should resolve to the action value when the action resolves', async () => {
     const action = () => Promise.resolve(expectedValue);
 
-    await expect(delay(action, 1, TimeUnit.Milliseconds)).resolves.toEqual(
-      expectedValue
-    );
+    await expect(delay(action, 1, TimeUnit.Milliseconds)).resolves.toEqual(expectedValue);
   });
 
   test('should delay the action by the specified amount', async () => {
@@ -38,8 +34,6 @@ describe('delay', () => {
   test('should resolve to the action value when the action is a sync', async () => {
     const action = () => expectedValue;
 
-    await expect(delay(action, 1, TimeUnit.Milliseconds)).resolves.toEqual(
-      expectedValue
-    );
+    await expect(delay(action, 1, TimeUnit.Milliseconds)).resolves.toEqual(expectedValue);
   });
 });

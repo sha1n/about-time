@@ -20,9 +20,7 @@ describe('ExponentialBackoffRetryPolicy', () => {
 
     let index = 0;
     for (const interval of policy.intervals()) {
-      expect(interval).toEqual(
-        expectedExponentialDecayIntervalFor(index, exponential)
-      );
+      expect(interval).toEqual(expectedExponentialDecayIntervalFor(index, exponential));
       index += 1;
     }
   });
@@ -43,9 +41,7 @@ describe('ExponentialBackoffRetryPolicy', () => {
       units
     });
 
-    expect(consume(policy)[2]).toEqual(
-      expectedExponentialDecayIntervalFor(2) * units
-    );
+    expect(consume(policy)[2]).toEqual(expectedExponentialDecayIntervalFor(2) * units);
   });
 
   test('should not cross a specified limit', () => {
@@ -59,9 +55,6 @@ describe('ExponentialBackoffRetryPolicy', () => {
   });
 });
 
-function expectedExponentialDecayIntervalFor(
-  index: number,
-  exponential = 2
-): number {
+function expectedExponentialDecayIntervalFor(index: number, exponential = 2): number {
   return Math.round((Math.pow(exponential, index) - 1) / 2);
 }
