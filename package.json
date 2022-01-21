@@ -1,6 +1,6 @@
 {
   "name": "@sha1n/about-time",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A set of essential time related utilities",
   "repository": "https://github.com/sha1n/about-time",
   "author": "Shai Nagar",
@@ -8,6 +8,18 @@
   "types": "./dist/types",
   "main": "./dist",
   "exports": "./dist/index.js",
+  "keywords": [
+    "time",
+    "wait",
+    "retry",
+    "sleep",
+    "delay",
+    "eventually",
+    "exponential-backoff",
+    "utility",
+    "typescript",
+    "timeout"
+  ],
   "scripts": {
     "clean": "rm -rf ./dist",
     "prebuild": "yarn run clean",
