@@ -16,7 +16,7 @@ describe.each(cases())('%s', ({ fn }) => {
       throw expectedError;
     };
 
-    await expect(fn(never, { timeout: 1, units: TimeUnit.Milliseconds })).rejects.toThrow(expectedError);
+    await expect(fn(never, { timeout: 1, units: TimeUnit.Seconds })).rejects.toThrow(expectedError);
   });
 
   test('should resolve when the provided condition is true within a specified timeout boundary', async () => {
