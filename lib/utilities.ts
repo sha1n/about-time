@@ -51,10 +51,6 @@ async function until(
   condition: () => boolean,
   opts?: { interval?: number; timeout: number; units?: TimeUnit }
 ): Promise<void> {
-  if (condition()) {
-    return;
-  }
-
   const defaultInterval = 50;
   const deadline = opts ? Date.now() + toMilliseconds(opts.timeout, opts.units) : Number.MAX_VALUE;
   const interval = opts?.interval ? toMilliseconds(opts.interval, opts.units) : defaultInterval;
@@ -66,9 +62,14 @@ async function until(
         reject(new Error('Timeout'));
       }
 
-      if (condition()) {
+      try {
+        if (condition()) {
+          clearInterval(handle);
+          resolve();
+        }
+      } catch (e) {
         clearInterval(handle);
-        resolve();
+        reject(e);
       }
     }, interval);
   });
