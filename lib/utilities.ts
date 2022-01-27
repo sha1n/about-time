@@ -1,5 +1,11 @@
 import { TimeUnit, toMilliseconds } from './timeunit';
 
+class TimeoutError extends Error {
+  constructor(message?: string) {
+    super(message || 'Timeout');
+  }
+}
+
 /**
  * Zzzz...
  *
@@ -24,7 +30,10 @@ function sleep(time: number, units?: TimeUnit): Promise<void> {
 function delay<T>(action: () => T | Promise<T>, time: number, units?: TimeUnit): Promise<T> {
   const delayMs = toMilliseconds(time, units);
   return new Promise((resolve, reject) => {
-    setTimeout(() => Promise.resolve(action()).then(resolve, reject), delayMs);
+    const timer = setTimeout(() => Promise.resolve(action()).then(resolve, reject), delayMs);
+    process.on('beforeExit', () => {
+      clearTimeout(timer);
+    });
   });
 }
 
@@ -59,7 +68,7 @@ async function until(
     const handle = setInterval(() => {
       if (Date.now() > deadline) {
         clearInterval(handle);
-        reject(new Error('Timeout'));
+        reject(new TimeoutError());
       }
 
       try {
@@ -80,4 +89,41 @@ async function until(
  */
 const eventually = until;
 
-export { sleep, delay, stopwatch, until, eventually };
+/**
+ * Executes an action with a specified timeout. If the action times out, rejects with TimeoutError.
+ *
+ * @param action an action to execute with timeout
+ * @param timeout the timeout to set for the action
+ * @param units the time units
+ * @returns the action result
+ */
+async function withTimeout<T>(action: () => T | Promise<T>, timeout: number, units?: TimeUnit): Promise<T> {
+  const promisedAction = new Promise<T>((resolve, reject) => {
+    try {
+      resolve(action());
+    } catch (e) {
+      reject(e);
+    }
+  });
+
+  const race = new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new TimeoutError());
+    }, toMilliseconds(timeout, units));
+
+    return Promise.resolve(promisedAction).then(
+      r => {
+        clearTimeout(timer);
+        resolve(r);
+      },
+      err => {
+        clearTimeout(timer);
+        reject(err);
+      }
+    );
+  });
+
+  return race;
+}
+
+export { withTimeout, sleep, delay, stopwatch, until, eventually };

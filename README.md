@@ -12,6 +12,7 @@ A collection of essential time related utilities.
 - [About-Time](#about-time)
   - [Install](#install)
   - [Delay](#delay)
+  - [WithTimeout](#withtimeout)
   - [Sleep](#sleep)
   - [Stopwatch](#stopwatch)
   - [Until / Eventually](#until--eventually)
@@ -33,6 +34,12 @@ npm i @sha1n/about-time
 ```ts
 // Execute a function with delay and return it's value
 await delay(action, 10, TimeUnit.Milliseconds);
+```
+
+## WithTimeout
+```ts
+// Execute a function and guards it with a specified timeout
+await withTimeout(action, 10, TimeUnit.Milliseconds);
 ```
 
 ## Sleep
