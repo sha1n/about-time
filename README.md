@@ -10,7 +10,8 @@
 A collection of essential time related utilities.
 
 - [About-Time](#about-time)
-  - [Install](#install)
+- [Install](#install)
+- [Utilities & Features](#utilities--features)
   - [Delay](#delay)
   - [WithTimeout](#withtimeout)
   - [Sleep](#sleep)
@@ -25,11 +26,12 @@ A collection of essential time related utilities.
     - [Retriable](#retriable)
 
 
-## Install
+# Install
 ```bash
 npm i @sha1n/about-time
 ```
 
+# Utilities & Features
 ## Delay
 ```ts
 // Execute a function with delay and return it's value
