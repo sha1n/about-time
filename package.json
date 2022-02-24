@@ -22,14 +22,12 @@
   ],
   "scripts": {
     "clean": "rm -rf ./dist",
-    "prebuild": "yarn run clean",
     "build": "tsc",
     "test": "DEBUG=error:* jest --coverage",
     "lint": "eslint --fix --ext .js,.ts .",
     "posttest": "npm run lint -s",
     "prepublish": "yarn run build"
   },
-  "dependencies": {},
   "devDependencies": {
     "@types/chance": "^1.1.3",
     "@types/jest": "^27.4.0",
@@ -55,5 +53,6 @@
     "ts-jest": "^27.1.3",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.4"
-  }
+  },
+  "packageManager": "yarn@3.2.0"
 }
