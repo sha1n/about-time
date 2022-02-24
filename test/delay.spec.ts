@@ -6,17 +6,18 @@ import { anError, aString, anInteger } from './randoms';
 describe('delay', () => {
   const expectedError = anError();
   const expectedValue = aString();
+  const timerOpts = { time: 1, units: TimeUnit.Milliseconds };
 
   test('should reject when the action rejects', async () => {
     const action = () => Promise.reject(expectedError);
 
-    await expect(delay(action, 1, TimeUnit.Milliseconds)).rejects.toThrow(expectedError);
+    await expect(delay(action, timerOpts)).rejects.toThrow(expectedError);
   });
 
   test('should resolve to the action value when the action resolves', async () => {
     const action = () => Promise.resolve(expectedValue);
 
-    await expect(delay(action, 1, TimeUnit.Milliseconds)).resolves.toEqual(expectedValue);
+    await expect(delay(action, timerOpts)).resolves.toEqual(expectedValue);
   });
 
   test('should delay the action by the specified amount', async () => {
@@ -24,7 +25,7 @@ describe('delay', () => {
     const elapsed = stopwatch();
     const delayMs = anInteger({ min: 100, max: 250 });
 
-    await expect(delay(action, delayMs)).resolves.toEqual(expectedValue);
+    await expect(delay(action, { time: delayMs })).resolves.toEqual(expectedValue);
 
     const elapsedMs = elapsed();
     expect(elapsedMs).toBeGreaterThanOrEqual(delayMs);
@@ -34,6 +35,6 @@ describe('delay', () => {
   test('should resolve to the action value when the action is a sync', async () => {
     const action = () => expectedValue;
 
-    await expect(delay(action, 1, TimeUnit.Milliseconds)).resolves.toEqual(expectedValue);
+    await expect(delay(action, timerOpts)).resolves.toEqual(expectedValue);
   });
 });

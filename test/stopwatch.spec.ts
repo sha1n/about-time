@@ -16,7 +16,7 @@ describe('stopwatch', () => {
   test('should return function that returns elapsed time in the specified units', async () => {
     const elapsed = stopwatch();
 
-    await sleep(1, TimeUnit.Second);
+    await sleep(1, { units: TimeUnit.Second });
     const elapsedTime = elapsed(TimeUnit.Seconds);
 
     expect(elapsedTime).toBeGreaterThanOrEqual(1);
