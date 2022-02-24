@@ -1,9 +1,17 @@
+import isCI from 'is-ci';
+
+const reporters = ['default', ['jest-summary-reporter', { failuresOnly: true }]];
+
+if (!isCI) {
+  reporters.push(['jest-html-reporters', { failuresOnly: false }]);
+}
+
 export default {
   testMatch: ['**/test/**/*.spec.ts'],
   coveragePathIgnorePatterns: ['test/*', 'dist/*'],
-  reporters: ['default', ['jest-summary-reporter', { failuresOnly: true }], ['jest-html-reporters', {}]],
+  reporters,
   verbose: true,
-  maxWorkers: '100%',
+  maxWorkers: isCI ? '2' : '100%',
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest'
   },
