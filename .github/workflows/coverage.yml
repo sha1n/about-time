@@ -14,4 +14,4 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           threshold: 80
           package-manager: yarn
-          test-script: yarn test
+          test-script: yarn jest
