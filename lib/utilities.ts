@@ -6,16 +6,32 @@ class TimeoutError extends Error {
   }
 }
 
+type TimerOptions = {
+  readonly time: number;
+  readonly units?: TimeUnit;
+  readonly unref?: boolean;
+};
+
+type PollOptions = {
+  readonly interval?: number;
+  readonly deadline?: number;
+  readonly units?: TimeUnit;
+  readonly unref?: boolean;
+};
+
 /**
  * Zzzz...
  *
- * @param time time to sleep
- * @param units the units on time
+ * @param options the units on time
  * @returns a promise that resolves when the specified time has elapsed.
  */
-function sleep(time: number, units?: TimeUnit): Promise<void> {
+function sleep(time: number, options?: Omit<TimerOptions, 'time'>): Promise<void> {
   return new Promise(resolve => {
-    setTimeout(resolve, toMilliseconds(time, units));
+    const timeout = setTimeout(resolve, toMilliseconds(time, options?.units));
+
+    if (options?.unref) {
+      timeout.unref();
+    }
   });
 }
 
@@ -27,13 +43,15 @@ function sleep(time: number, units?: TimeUnit): Promise<void> {
  * @param units the units on time
  * @returns a promise that resolves when the specified time has elapsed.
  */
-function delay<T>(action: () => T | Promise<T>, time: number, units?: TimeUnit): Promise<T> {
+function delay<T>(action: () => T | Promise<T>, options: TimerOptions): Promise<T> {
+  const { time, units, unref } = options;
   const delayMs = toMilliseconds(time, units);
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => Promise.resolve(action()).then(resolve, reject), delayMs);
-    process.on('beforeExit', () => {
-      clearTimeout(timer);
-    });
+
+    if (unref) {
+      timer.unref();
+    }
   });
 }
 
@@ -53,16 +71,13 @@ function stopwatch(): (units?: TimeUnit) => number {
  * Awaits a specified condition to evaluate to true with or without a timeout.
  *
  * @param condition the condition to wait for
- * @param opts options that control evaluation intervals and timeout
+ * @param options options that control evaluation intervals and timeout
  * @returns a promise that resolves when the condition becomes true, or rejects when a set timeout is crossed.
  */
-async function until(
-  condition: () => boolean,
-  opts?: { interval?: number; timeout: number; units?: TimeUnit }
-): Promise<void> {
+async function until(condition: () => boolean, options?: PollOptions): Promise<void> {
   const defaultInterval = 50;
-  const deadline = opts ? Date.now() + toMilliseconds(opts.timeout, opts.units) : Number.MAX_VALUE;
-  const interval = opts?.interval ? toMilliseconds(opts.interval, opts.units) : defaultInterval;
+  const deadline = options?.deadline ? Date.now() + toMilliseconds(options.deadline, options.units) : Number.MAX_VALUE;
+  const interval = options?.interval ? toMilliseconds(options.interval, options.units) : defaultInterval;
 
   return new Promise<void>((resolve, reject) => {
     const handle = setInterval(() => {
@@ -81,6 +96,10 @@ async function until(
         reject(e);
       }
     }, interval);
+
+    if (options?.unref) {
+      handle.unref();
+    }
   });
 }
 
