@@ -9,7 +9,7 @@ describe('stopwatch', () => {
     await sleep(10);
     const elapsedTime = elapsed();
 
-    expect(elapsedTime).toBeGreaterThanOrEqual(10 * TimeUnit.Milliseconds);
+    expect(elapsedTime).toBeGreaterThanOrEqual(9 * TimeUnit.Milliseconds);
     expect(elapsedTime).toBeLessThan(TimeUnit.Second);
   });
 

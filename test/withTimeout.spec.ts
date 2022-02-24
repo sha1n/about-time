@@ -10,7 +10,7 @@ describe('withTimeout', () => {
   test('should reject when the action rejects', async () => {
     const action = () => Promise.reject(expectedError);
 
-    await expect(withTimeout(action, 1, TimeUnit.Minute)).rejects.toThrow(expectedError);
+    await expect(withTimeout(action, { time: 1, units: TimeUnit.Minute })).rejects.toThrow(expectedError);
   });
 
   test('should reject when the action throws', async () => {
@@ -18,19 +18,19 @@ describe('withTimeout', () => {
       throw expectedError;
     };
 
-    await expect(withTimeout(action, 1, TimeUnit.Minute)).rejects.toThrow(expectedError);
+    await expect(withTimeout(action, { time: 1, units: TimeUnit.Minute })).rejects.toThrow(expectedError);
   });
 
   test('should resolve to the action resolved value when resolves on time', async () => {
     const action = () => Promise.resolve(expectedValue);
 
-    await expect(withTimeout(action, 1, TimeUnit.Minute)).resolves.toEqual(expectedValue);
+    await expect(withTimeout(action, { time: 1, units: TimeUnit.Minute })).resolves.toEqual(expectedValue);
   });
 
   test('should resolve to the action returned value when returns on time', async () => {
     const action = () => expectedValue;
 
-    await expect(withTimeout(action, 1, TimeUnit.Minute)).resolves.toEqual(expectedValue);
+    await expect(withTimeout(action, { time: 1, units: TimeUnit.Minute })).resolves.toEqual(expectedValue);
   });
 
   // eslint-disable-next-line prettier/prettier
@@ -40,7 +40,7 @@ describe('withTimeout', () => {
       await until(() => done);
     };
 
-    await expect(withTimeout(longAction, 1, TimeUnit.Millisecond)).rejects.toThrow(/Timeout/);
+    await expect(withTimeout(longAction, { time: 1, units: TimeUnit.Millisecond })).rejects.toThrow(/Timeout/);
     done = true;
   });
 });
