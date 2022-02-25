@@ -12,18 +12,19 @@ A collection of essential time related utilities.
 - [About-Time](#about-time)
 - [Install](#install)
 - [Utilities & Features](#utilities--features)
-  - [Delay](#delay)
-  - [WithTimeout](#withtimeout)
-  - [Sleep](#sleep)
-  - [Stopwatch](#stopwatch)
-  - [Until / Eventually](#until--eventually)
+  - [delay](#delay)
+  - [timeoutAround](#timeoutaround)
+  - [timeBounded](#timebounded)
+  - [sleep](#sleep)
+  - [stopwatch](#stopwatch)
+  - [until / eventually](#until--eventually)
   - [Retry](#retry)
     - [RetryPolicy](#retrypolicy)
       - [Simple retry policy](#simple-retry-policy)
       - [Fixed retry policy](#fixed-retry-policy)
       - [Exponential backoff retry policy](#exponential-backoff-retry-policy)
-    - [RetryAround](#retryaround)
-    - [Retriable](#retriable)
+    - [retryAround](#retryaround)
+    - [retriable](#retriable)
 
 
 # Install
@@ -32,7 +33,7 @@ npm i @sha1n/about-time
 ```
 
 # Utilities & Features
-## Delay
+## delay
 ```ts
 // Execute a function with delay and return it's value
 await delay(action, { time: 10 });
@@ -40,15 +41,23 @@ await delay(action, { time: 10, units: TimeUnit.Milliseconds });
 await delay(action, { time: 10, units: TimeUnit.Milliseconds, unref: true });
 ```
 
-## WithTimeout
+## timeoutAround
 ```ts
 // Execute a function and guards it with a specified timeout
-await withTimeout(action, { time: 10 });
-await withTimeout(action, { time: 10, units: TimeUnit.Milliseconds });
-await withTimeout(action, { time: 10, units: TimeUnit.Milliseconds, unref: true });
+await timeoutAround(action, { time: 10 });
+await timeoutAround(action, { time: 10, units: TimeUnit.Milliseconds });
+await timeoutAround(action, { time: 10, units: TimeUnit.Milliseconds, unref: true });
 ```
 
-## Sleep
+## timeBounded
+Wraps a given function with `timeoutAround` with the specified arguments.
+```ts
+const timeBoundAction = timeBounded(action, options);
+const result = await timeBoundAction();
+```
+
+
+## sleep
 ```ts
 // Pause execution for a specified amount of time
 await sleep(10);
@@ -56,7 +65,7 @@ await sleep(10, { units: TimeUnit.Seconds });
 await sleep(10, { units: TimeUnit.Seconds, unref: true });
 ```
 
-## Stopwatch
+## stopwatch
 ```ts
 // Measure time between actions
 const elapsed = stopwatch();
@@ -70,7 +79,7 @@ const elapsed1 = elapsed(TimeUnit.Milliseconds);
 const elapsed2 = elapsed(TimeUnit.Seconds);
 ```
 
-## Until / Eventually
+## until / eventually
 ```ts
 // Wait for a condition to become true
 await until(condition, { deadline: 10000 });
@@ -106,14 +115,14 @@ interval<sub>i</sub> = min(limit, (exponential<sup>i</sup> - 1) / 2)
 const retryPolicy = exponentialBackoffRetryPolicy(/* count = */10, /* opts?: { exponential?: number, limit?: number, units?: TimeUnit }*/);
 ```
 
-### RetryAround
+### retryAround
 Executes the given function with retries based on the specified policy and *optional* predicate.
 The predicate provides control over which errors we want to retry on.
 ```ts
 const result = await retryAround(action, retryPolicy, predicate);
 ```
 
-### Retriable
+### retriable
 Wraps a given function with `retryAround` with the specified arguments.
 ```ts
 const retriableAction = retriable(action, retryPolicy, predicate);
