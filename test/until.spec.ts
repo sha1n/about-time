@@ -1,10 +1,11 @@
 import 'jest-extended';
-import { TimeUnit } from '../lib/timeunit';
-import { until, eventually, stopwatch } from '../lib/utilities';
-import { anError } from './randoms';
+import { TimeUnit } from '../lib/types';
+import { stopwatch } from '../lib/stopwatch';
+import { until, eventually } from '../lib/eventually';
+import { anError, aBoolean } from './randoms';
 
 describe.each(cases())('%s', ({ fn }) => {
-  const pollOpts = { deadline: 1, units: TimeUnit.Milliseconds };
+  const pollOpts = { deadline: 1, units: TimeUnit.Milliseconds, unref: aBoolean() };
 
   test('should reject with timeout when the provided timeout is passed', async () => {
     const never = () => Date.now() < 0;
@@ -18,7 +19,9 @@ describe.each(cases())('%s', ({ fn }) => {
       throw expectedError;
     };
 
-    await expect(fn(never, { deadline: 10, units: TimeUnit.Seconds })).rejects.toThrow(expectedError);
+    await expect(fn(never, { deadline: 10, units: TimeUnit.Seconds, unref: aBoolean() })).rejects.toThrow(
+      expectedError
+    );
   });
 
   test('should resolve when the provided condition is true within a specified timeout boundary', async () => {
@@ -27,7 +30,7 @@ describe.each(cases())('%s', ({ fn }) => {
       value = true;
     }, 100);
 
-    await expect(fn(() => value, { deadline: 1, units: TimeUnit.Minutes })).toResolve();
+    await expect(fn(() => value, { deadline: 1, units: TimeUnit.Minutes, unref: aBoolean() })).toResolve();
   });
 
   test('should use the interval option when present', async () => {
@@ -41,7 +44,8 @@ describe.each(cases())('%s', ({ fn }) => {
       fn(() => value, {
         deadline: 1 * TimeUnit.Minute,
         interval: 10,
-        units: TimeUnit.Milliseconds
+        units: TimeUnit.Milliseconds,
+        unref: aBoolean()
       })
     ).toResolve();
 

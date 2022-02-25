@@ -1,7 +1,8 @@
 import 'jest-extended';
-import { TimeUnit } from '../lib/timeunit';
-import { until, timeBounded } from '../lib/utilities';
-import { anError, aString } from './randoms';
+import { TimeUnit } from '../lib/types';
+import { until } from '../lib/eventually';
+import { timeBounded } from '../lib/timeout';
+import { anError, aString, aBoolean } from './randoms';
 
 describe('timeoutAround/timeBounded', () => {
   const expectedError = anError();
@@ -10,7 +11,9 @@ describe('timeoutAround/timeBounded', () => {
   test('should reject when the action rejects', async () => {
     const action = () => Promise.reject(expectedError);
 
-    await expect(timeBounded(action, { time: 1, units: TimeUnit.Minute })()).rejects.toThrow(expectedError);
+    await expect(timeBounded(action, { time: 1, units: TimeUnit.Minute, unref: aBoolean() })()).rejects.toThrow(
+      expectedError
+    );
   });
 
   test('should reject when the action throws', async () => {
@@ -18,19 +21,25 @@ describe('timeoutAround/timeBounded', () => {
       throw expectedError;
     };
 
-    await expect(timeBounded(action, { time: 1, units: TimeUnit.Minute })()).rejects.toThrow(expectedError);
+    await expect(timeBounded(action, { time: 1, units: TimeUnit.Minute, unref: aBoolean() })()).rejects.toThrow(
+      expectedError
+    );
   });
 
   test('should resolve to the action resolved value when resolves on time', async () => {
     const action = () => Promise.resolve(expectedValue);
 
-    await expect(timeBounded(action, { time: 1, units: TimeUnit.Minute })()).resolves.toEqual(expectedValue);
+    await expect(timeBounded(action, { time: 1, units: TimeUnit.Minute, unref: aBoolean() })()).resolves.toEqual(
+      expectedValue
+    );
   });
 
   test('should resolve to the action returned value when returns on time', async () => {
     const action = () => expectedValue;
 
-    await expect(timeBounded(action, { time: 1, units: TimeUnit.Minute })()).resolves.toEqual(expectedValue);
+    await expect(timeBounded(action, { time: 1, units: TimeUnit.Minute, unref: aBoolean() })()).resolves.toEqual(
+      expectedValue
+    );
   });
 
   // eslint-disable-next-line prettier/prettier
@@ -40,7 +49,9 @@ describe('timeoutAround/timeBounded', () => {
       await until(() => done);
     };
 
-    await expect(timeBounded(longAction, { time: 1, units: TimeUnit.Millisecond })()).rejects.toThrow(/Timeout/);
+    await expect(
+      timeBounded(longAction, { time: 1, units: TimeUnit.Millisecond, unref: aBoolean() })()
+    ).rejects.toThrow(/Timeout/);
     done = true;
   });
 });

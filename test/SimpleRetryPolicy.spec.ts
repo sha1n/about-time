@@ -1,5 +1,5 @@
 import { simpleRetryPolicy } from '../lib/retry';
-import { TimeUnit } from '../lib/timeunit';
+import { TimeUnit } from '../lib/types';
 import { anInteger } from './randoms';
 import { consume } from './utils';
 

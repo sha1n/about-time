@@ -1,5 +1,6 @@
 import 'jest-extended';
-import { TimeUnit, toMilliseconds } from '../lib/timeunit';
+import { TimeUnit } from '../lib/types';
+import { toMilliseconds } from '../lib/toMilliseconds';
 
 describe('toMilliseconds', () => {
   test('should converted all units correctly', async () => {
