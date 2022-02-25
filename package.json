@@ -23,8 +23,9 @@
   "scripts": {
     "clean": "rm -rf ./dist",
     "build": "tsc",
-    "test": "DEBUG='error:*' jest --coverage && run lint",
     "lint": "eslint --fix --ext .js,.ts .",
+    "jest": "DEBUG='error:*' jest --coverage",
+    "test": "run jest && run lint",
     "prepublish": "run build"
   },
   "devDependencies": {
