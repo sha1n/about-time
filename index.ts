@@ -1,5 +1,5 @@
 export { TimeUnit, toMilliseconds } from './lib/timeunit';
-export { withTimeout, sleep, delay, stopwatch, until, eventually } from './lib/utilities';
+export { timeoutAround, timeBounded, sleep, delay, stopwatch, until, eventually } from './lib/utilities';
 export {
   RetryPolicy,
   retryAround,
