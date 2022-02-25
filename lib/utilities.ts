@@ -136,7 +136,7 @@ const eventually = until;
  * @param options timer options
  * @returns the action result
  */
-async function withTimeout<T>(action: () => T | Promise<T>, options: TimerOptions): Promise<T> {
+async function timeoutAround<T>(action: () => T | Promise<T>, options: TimerOptions): Promise<T> {
   const promisedAction = new Promise<T>((resolve, reject) => {
     try {
       resolve(action());
@@ -169,4 +169,10 @@ async function withTimeout<T>(action: () => T | Promise<T>, options: TimerOption
   return race;
 }
 
-export { withTimeout, sleep, delay, stopwatch, until, eventually };
+function timeBounded<T>(action: () => T | Promise<T>, options: TimerOptions): () => Promise<T> {
+  return () => {
+    return timeoutAround(action, options);
+  };
+}
+
+export { timeoutAround, timeBounded, sleep, delay, stopwatch, until, eventually };

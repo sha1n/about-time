@@ -1,16 +1,16 @@
 import 'jest-extended';
 import { TimeUnit } from '../lib/timeunit';
-import { until, withTimeout } from '../lib/utilities';
+import { until, timeBounded } from '../lib/utilities';
 import { anError, aString } from './randoms';
 
-describe('withTimeout', () => {
+describe('timeoutAround/timeBounded', () => {
   const expectedError = anError();
   const expectedValue = aString();
 
   test('should reject when the action rejects', async () => {
     const action = () => Promise.reject(expectedError);
 
-    await expect(withTimeout(action, { time: 1, units: TimeUnit.Minute })).rejects.toThrow(expectedError);
+    await expect(timeBounded(action, { time: 1, units: TimeUnit.Minute })()).rejects.toThrow(expectedError);
   });
 
   test('should reject when the action throws', async () => {
@@ -18,19 +18,19 @@ describe('withTimeout', () => {
       throw expectedError;
     };
 
-    await expect(withTimeout(action, { time: 1, units: TimeUnit.Minute })).rejects.toThrow(expectedError);
+    await expect(timeBounded(action, { time: 1, units: TimeUnit.Minute })()).rejects.toThrow(expectedError);
   });
 
   test('should resolve to the action resolved value when resolves on time', async () => {
     const action = () => Promise.resolve(expectedValue);
 
-    await expect(withTimeout(action, { time: 1, units: TimeUnit.Minute })).resolves.toEqual(expectedValue);
+    await expect(timeBounded(action, { time: 1, units: TimeUnit.Minute })()).resolves.toEqual(expectedValue);
   });
 
   test('should resolve to the action returned value when returns on time', async () => {
     const action = () => expectedValue;
 
-    await expect(withTimeout(action, { time: 1, units: TimeUnit.Minute })).resolves.toEqual(expectedValue);
+    await expect(timeBounded(action, { time: 1, units: TimeUnit.Minute })()).resolves.toEqual(expectedValue);
   });
 
   // eslint-disable-next-line prettier/prettier
@@ -40,7 +40,7 @@ describe('withTimeout', () => {
       await until(() => done);
     };
 
-    await expect(withTimeout(longAction, { time: 1, units: TimeUnit.Millisecond })).rejects.toThrow(/Timeout/);
+    await expect(timeBounded(longAction, { time: 1, units: TimeUnit.Millisecond })()).rejects.toThrow(/Timeout/);
     done = true;
   });
 });
