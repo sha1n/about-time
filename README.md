@@ -35,19 +35,25 @@ npm i @sha1n/about-time
 ## Delay
 ```ts
 // Execute a function with delay and return it's value
-await delay(action, 10, TimeUnit.Milliseconds);
+await delay(action, { time: 10 });
+await delay(action, { time: 10, units: TimeUnit.Milliseconds });
+await delay(action, { time: 10, units: TimeUnit.Milliseconds, unref: true });
 ```
 
 ## WithTimeout
 ```ts
 // Execute a function and guards it with a specified timeout
-await withTimeout(action, 10, TimeUnit.Milliseconds);
+await withTimeout(action, { time: 10 });
+await withTimeout(action, { time: 10, units: TimeUnit.Milliseconds });
+await withTimeout(action, { time: 10, units: TimeUnit.Milliseconds, unref: true });
 ```
 
 ## Sleep
 ```ts
 // Pause execution for a specified amount of time
-await sleep(10, TimeUnit.Seconds);
+await sleep(10);
+await sleep(10, { units: TimeUnit.Seconds });
+await sleep(10, { units: TimeUnit.Seconds, unref: true });
 ```
 
 ## Stopwatch
@@ -67,8 +73,10 @@ const elapsed2 = elapsed(TimeUnit.Seconds);
 ## Until / Eventually
 ```ts
 // Wait for a condition to become true
-await until(condition, {timeout: 1, units: TimeUnit.Minute});
-await eventually(condition, {timeout: 1, units: TimeUnit.Minute});
+await until(condition, { deadline: 10000 });
+await until(condition, { deadline: 10000, interval: 100 });
+await until(condition, { deadline: 10000, interval: 100, units: TimeUnit.Milliseconds });
+await until(condition, { deadline: 10000, interval: 100, units: TimeUnit.Milliseconds, unref: true });
 ```
 
 ## Retry
