@@ -1,6 +1,7 @@
 import 'jest-extended';
-import { TimeUnit } from '../lib/timeunit';
-import { sleep, stopwatch } from '../lib/utilities';
+import { TimeUnit } from '../lib/types';
+import { sleep } from '../lib/delay';
+import { stopwatch } from '../lib/stopwatch';
 
 describe('stopwatch', () => {
   test('should return function that returns elapsed time in millis by default', async () => {

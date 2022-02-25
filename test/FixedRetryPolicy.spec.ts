@@ -1,5 +1,5 @@
 import { fixedRetryPolicy } from '../lib/retry';
-import { TimeUnit } from '../lib/timeunit';
+import { TimeUnit } from '../lib/types';
 import { consume } from './utils';
 
 describe('FixedRetryPolicy', () => {

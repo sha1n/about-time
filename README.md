@@ -13,6 +13,7 @@ A collection of essential time related utilities.
 - [Install](#install)
 - [Utilities & Features](#utilities--features)
   - [delay](#delay)
+  - [delayed](#delayed)
   - [timeoutAround](#timeoutaround)
   - [timeBounded](#timebounded)
   - [sleep](#sleep)
@@ -35,15 +36,22 @@ npm i @sha1n/about-time
 # Utilities & Features
 ## delay
 ```ts
-// Execute a function with delay and return it's value
+// Executes a function with delay and returns it's value
 await delay(action, { time: 10 });
 await delay(action, { time: 10, units: TimeUnit.Milliseconds });
 await delay(action, { time: 10, units: TimeUnit.Milliseconds, unref: true });
 ```
 
+## delayed
+```ts
+// Returns a new function that executes the specified action with delay and returns it's value
+const delayedAction = delayed(action, { time: 10, units: TimeUnit.Milliseconds, unref: true });
+const result = await delayedAction();
+```
+
 ## timeoutAround
 ```ts
-// Execute a function and guards it with a specified timeout
+// Executes a function and guards it with a specified timeout
 await timeoutAround(action, { time: 10 });
 await timeoutAround(action, { time: 10, units: TimeUnit.Milliseconds });
 await timeoutAround(action, { time: 10, units: TimeUnit.Milliseconds, unref: true });
@@ -59,7 +67,7 @@ const result = await timeBoundAction();
 
 ## sleep
 ```ts
-// Pause execution for a specified amount of time
+// Pauses execution for a specified amount of time
 await sleep(10);
 await sleep(10, { units: TimeUnit.Seconds });
 await sleep(10, { units: TimeUnit.Seconds, unref: true });
@@ -81,7 +89,7 @@ const elapsed2 = elapsed(TimeUnit.Seconds);
 
 ## until / eventually
 ```ts
-// Wait for a condition to become true
+// Waits for a condition to become true
 await until(condition, { deadline: 10000 });
 await until(condition, { deadline: 10000, interval: 100 });
 await until(condition, { deadline: 10000, interval: 100, units: TimeUnit.Milliseconds });

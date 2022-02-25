@@ -1,5 +1,6 @@
-import { TimeUnit, toMilliseconds } from './timeunit';
-import { sleep } from './utilities';
+import { toMilliseconds } from './toMilliseconds';
+import { sleep } from './delay';
+import { TimeUnit } from './types';
 
 interface RetryPolicy {
   intervals(): Iterable<number>;
