@@ -37,7 +37,7 @@ describe.each(cases())('%s', ({ fn }) => {
     let value = false;
     setTimeout(() => {
       value = true;
-    }, 100);
+    }, 120);
 
     const elapsed = stopwatch();
     await expect(

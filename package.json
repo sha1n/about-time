@@ -1,13 +1,17 @@
 {
   "name": "@sha1n/about-time",
-  "version": "0.0.13",
+  "version": "0.1.0",
+  "type": "commonjs",
   "description": "A set of essential time related utilities",
   "repository": "https://github.com/sha1n/about-time",
   "author": "Shai Nagar",
   "license": "MIT",
-  "types": "./dist/types",
   "main": "./dist",
-  "exports": "./dist/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": [
+    "./dist/index.js",
+    "./dist/types/index.d.ts"
+  ],
   "keywords": [
     "time",
     "wait",
