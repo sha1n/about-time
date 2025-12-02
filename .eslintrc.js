@@ -19,8 +19,6 @@ module.exports = {
   },
   rules: {
     '@typescript-eslint/no-var-requires': 0,
-    '@typescript-eslint/semi': 1,
-    '@typescript-eslint/quotes': ['error', 'single'],
     'no-floating-promise/no-floating-promise': 2,
     'no-return-await': 'error',
     'jest/no-disabled-tests': 'warn',
