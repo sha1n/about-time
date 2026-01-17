@@ -60,7 +60,6 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.5.0"
   },
-  "packageManager": "pnpm@9.15.4",
   "dependencies": {
     "@typescript-eslint/typescript-estree": "^8.0.0"
   },
