@@ -16,11 +16,11 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: 'yarn'
+          cache: 'pnpm'
       - uses: ArtiomTr/jest-coverage-report-action@v2
         id: coverage
         with:
-          package-manager: yarn
-          test-script: yarn jest
+          package-manager: pnpm
+          test-script: pnpm jest
           output: report-markdown
 

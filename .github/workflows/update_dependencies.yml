@@ -13,12 +13,9 @@ jobs:
     - uses: actions/setup-node@v6
       with:
         node-version: 24
-        cache: 'yarn'
+        cache: 'pnpm'
     - run: |
-        yarn up '*'
-        yarn up -R '*'
-        yarn up '@sha1n/*'
-        yarn up -R '@sha1n/*'
+        pnpm update -r --latest
 
     - name: PR
       uses: technote-space/create-pr-action@v2
@@ -26,4 +23,4 @@ jobs:
         COMMIT_MESSAGE: Updated dependencies
         PR_BRANCH_NAME: automatic_dependency_updates
         PR_TITLE: Update dependencies
-        PR_BODY: Automatic `yarn up` based dependencies update
+        PR_BODY: Automatic `pnpm update` based dependencies update
