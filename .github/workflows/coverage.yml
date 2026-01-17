@@ -12,14 +12,12 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9.15.4
+      - uses: actions/checkout@v6
       - uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version-file: ".nvmrc"
           cache: 'pnpm'
+      - uses: pnpm/action-setup@v4
       - uses: ArtiomTr/jest-coverage-report-action@v2
         id: coverage
         with:
