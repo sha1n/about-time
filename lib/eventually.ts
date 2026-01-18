@@ -14,26 +14,29 @@ async function until(condition: () => boolean, options?: PollOptions): Promise<v
   const interval = options?.interval ? toMilliseconds(options.interval, options.units) : defaultInterval;
 
   return new Promise<void>((resolve, reject) => {
-    const handle = setInterval(() => {
+    let handle: NodeJS.Timeout;
+
+    const poll = () => {
       if (Date.now() > deadline) {
-        clearInterval(handle);
         reject(new TimeoutError());
+        return;
       }
 
       try {
         if (condition()) {
-          clearInterval(handle);
           resolve();
+        } else {
+          handle = setTimeout(poll, interval);
+          if (options?.unref) {
+            handle.unref();
+          }
         }
       } catch (e) {
-        clearInterval(handle);
         reject(e);
       }
-    }, interval);
+    };
 
-    if (options?.unref) {
-      handle.unref();
-    }
+    poll();
   });
 }
 
