@@ -4,13 +4,14 @@ on:
   push:
     branches:
       - master
+      - chore/release-wf
     tags:
       - 'v*'
   workflow_dispatch:
 
 jobs:
   detect-and-tag:
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/chore/release-wf'
     runs-on: ubuntu-latest
     permissions:
       contents: write
