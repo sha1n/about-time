@@ -1,6 +1,6 @@
 import isCI from 'is-ci';
 
-const reporters = ['default', ['jest-summary-reporter', { failuresOnly: true }]];
+const reporters: any[] = ['default', ['jest-summary-reporter', { failuresOnly: true }]];
 
 if (!isCI) {
   reporters.push(['jest-html-reporters', { failuresOnly: false }]);
@@ -13,7 +13,7 @@ export default {
   verbose: true,
   maxWorkers: isCI ? '2' : '100%',
   transform: {
-    '^.+\\.(ts|tsx)$': 'ts-jest'
+    '^.+\\.(ts|tsx)$': ['ts-jest', { tsconfig: 'tsconfig.json' }]
   },
   testEnvironment: 'node',
   preset: 'ts-jest',
