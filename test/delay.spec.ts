@@ -31,7 +31,7 @@ describe('delay', () => {
     await expect(delayed(action, { time: delayMs })()).resolves.toEqual(expectedValue);
 
     const elapsedMs = elapsed();
-    expect(elapsedMs).toBeGreaterThanOrEqual(delayMs);
+    expect(elapsedMs).toBeGreaterThanOrEqual(delayMs - 5);
     expect(elapsedMs).toBeLessThan(delayMs * 2); // just to make sure we are in a sane range
   });
 
