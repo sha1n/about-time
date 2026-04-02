@@ -9,7 +9,11 @@ interface RetryPolicy {
 class SimpleRetryPolicy implements RetryPolicy {
   private readonly interval: number;
 
-  constructor(private readonly count: number, interval: number, units?: TimeUnit) {
+  constructor(
+    private readonly count: number,
+    interval: number,
+    units?: TimeUnit
+  ) {
     this.interval = toMilliseconds(interval, units);
   }
 

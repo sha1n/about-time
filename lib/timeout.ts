@@ -18,9 +18,12 @@ async function timeoutAround<T>(action: () => T | Promise<T>, options: TimerOpti
   });
 
   const race = new Promise<T>((resolve, reject) => {
-    const timer = setTimeout(() => {
-      reject(new TimeoutError());
-    }, toMilliseconds(options.time, options.units));
+    const timer = setTimeout(
+      () => {
+        reject(new TimeoutError());
+      },
+      toMilliseconds(options.time, options.units)
+    );
 
     if (options.unref) {
       timer.unref();
